@@ -46,3 +46,13 @@ LOAD DATA LOCAL INPATH 'data1.csv' INTO TABLE tbl1;
     >>> Escriba su respuesta a partir de este punto <<<
 */
 
+INSERT OVERWRITE DIRECTORY 'output'
+ROW FORMAT DELIMITED FIELDS TERMINATED BY ','
+select t0.c1, t0.c2, t1.value from tbl0 t0
+join (
+select c1, unal.key, unal.value from tbl1
+lateral view explode(c4) unal AS key, value
+order by unal.key
+) t1
+on (t0.c1 = t1.c1 and t0.c2 = t1.key)
+order by t0.c1;
