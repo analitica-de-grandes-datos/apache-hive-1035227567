@@ -30,3 +30,9 @@ LOAD DATA LOCAL INPATH 'data.tsv' INTO TABLE t0;
     >>> Escriba su respuesta a partir de este punto <<<
 */
 
+INSERT OVERWRITE DIRECTORY 'output'
+ROW FORMAT DELIMITED FIELDS TERMINATED BY ','
+select unal.key, count(1)
+from t0
+lateral view explode(c3) unal AS key, value
+group by unal.key;

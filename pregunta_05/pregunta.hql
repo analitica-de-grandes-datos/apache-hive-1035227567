@@ -45,3 +45,12 @@ LOAD DATA LOCAL INPATH 'data1.csv' INTO TABLE tbl1;
     >>> Escriba su respuesta a partir de este punto <<<
 */
 
+INSERT OVERWRITE DIRECTORY 'output'
+ROW FORMAT DELIMITED FIELDS TERMINATED BY ','
+SELECT valor, letras, count(*) as total FROM(
+SELECT SUBSTRING(c4,0,4) as valor, letras FROM tbl0
+LATERAL VIEW
+    explode(c5) tbl0 as letras
+ORDER BY valor, letras
+) w
+GROUP BY valor, letras;
