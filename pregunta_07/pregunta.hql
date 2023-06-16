@@ -45,18 +45,15 @@ LOAD DATA LOCAL INPATH 'data1.csv' INTO TABLE tbl1;
 /*
     >>> Escriba su respuesta a partir de este punto <<<
 */
-
 DROP TABLE IF EXISTS tbl0;
-
 DROP TABLE IF EXISTS word_count;
-
 CREATE TABLE tbl0 (
-    indice INT,
-    letas STRING,
-    valor INT,
-    letra STRING,
-    listaLetras ARRAY<CHAR(1)>,
-    valoresMap MAP<STRING, INT>
+    c1 INT,
+    c2 STRING,
+    c3 INT,
+    c4 STRING,
+    c5 ARRAY<CHAR(1)>, 
+    c6 MAP<STRING, INT>
 )
 ROW FORMAT DELIMITED 
 FIELDS TERMINATED BY ','
@@ -66,6 +63,7 @@ LINES TERMINATED BY '\n';
 LOAD DATA LOCAL INPATH 'data0.csv' INTO TABLE tbl0;
 
 CREATE TABLE word_count AS SELECT c2, c1 FROM tbl0;
+
 
 INSERT OVERWRITE LOCAL DIRECTORY './output'
 ROW FORMAT DELIMITED FIELDS TERMINATED BY ','

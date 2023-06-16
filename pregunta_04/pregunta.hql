@@ -8,10 +8,12 @@ Escriba una consulta que retorne los valores únicos de la columna `t0.c5`
 Apache Hive se ejecutará en modo local (sin HDFS).
 
 Escriba el resultado a la carpeta `output` de directorio de trabajo.
+    >>> Escriba su respuesta a partir de este punto <<<
 */
 
-
 DROP TABLE IF EXISTS tbl0;
+
+DROP TABLE IF EXISTS word_count;
 CREATE TABLE tbl0 (
     c1 INT,
     c2 STRING,
@@ -27,47 +29,8 @@ MAP KEYS TERMINATED BY '#'
 LINES TERMINATED BY '\n';
 LOAD DATA LOCAL INPATH 'data0.csv' INTO TABLE tbl0;
 
-DROP TABLE IF EXISTS tbl1;
-CREATE TABLE tbl1 (
-    c1 INT,
-    c2 INT,
-    c3 STRING,
-    c4 MAP<STRING, INT>
-)
-ROW FORMAT DELIMITED 
-FIELDS TERMINATED BY ','
-COLLECTION ITEMS TERMINATED BY ':'
-MAP KEYS TERMINATED BY '#'
-LINES TERMINATED BY '\n';
-LOAD DATA LOCAL INPATH 'data1.csv' INTO TABLE tbl1;
-
-/*
-    >>> Escriba su respuesta a partir de este punto <<<
-*/
-
-DROP TABLE IF EXISTS tbl0;
-
-DROP TABLE IF EXISTS word_count;
-
-CREATE TABLE tbl0 (
-    indice INT,
-    letra STRING,
-    valor INT,
-    fecha DATE,
-    listaLetras ARRAY<CHAR(1)>,
-    listaMap MAP<STRING, INT>
-)
-ROW FORMAT DELIMITED 
-FIELDS TERMINATED BY ','
-COLLECTION ITEMS TERMINATED BY ':'
-MAP KEYS TERMINATED BY '#'
-LINES TERMINATED BY '\n';
-LOAD DATA LOCAL INPATH 'data0.csv' INTO TABLE tbl0;
-
 CREATE TABLE word_count AS SELECT explode(c5) AS letra FROM tbl0;
 
 INSERT OVERWRITE LOCAL DIRECTORY './output'
 ROW FORMAT DELIMITED FIELDS TERMINATED BY ','
-SELECT * FROM word_count
-         GROUP BY letra
-         ORDER BY letra ASC;
+SELECT * FROM word_count GROUP BY letra ORDER BY letra ASC;
